@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+     <center>
+    <div class="container">
+      <h1 class="title">Todo List</h1>
+      <p id="welcome"></p>
+      <div class="button-container">
+        <button onclick="location.href='todo-add.html'">Add</button>
+      </div>
+     
+      <div class="table-container">
+        <div id="to-do-list-table" class="center"></div>
+      
+      </div>
+    </div>
+  </center>
+    
+    <script>
+      var token = localStorage.getItem("token");
+      var authheader;
+      if (token != "" && token != null) {
+        authheader = 'Bearer ' + token ;
+      } else {
+        authheader = "";
+      }
+
+      function getData() {
+        fetch('/todoapi/lists', {
+          credentials: "include",
+          headers: {
+            "Authorization": authheader,
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            let lists = data.lists;
+            let output = '<table>';
+              
+
+            output += '<tr><th>Todo List</th><th>Action</th></tr>';
+            for (let i = 0; i < lists.length; i++) {
+              output += `
+                <tr>
+                  <td><a href="todo-update.html?id=${lists[i].id}">${lists[i].name}</a></td>
+                  <td><button class="delete" onclick= "deleteList(${lists[i].id})">Delete</button></td>
+                </tr>
+              `;
+            }
+            output += '</table>';
+            document.querySelector('#to-do-list-table').innerHTML = output;
+          })
+          .catch(error => console.error(error));
+      }
+
+      function deleteList(id) {
+        window.location.assign("todo-delete.html?id="+id);
+      }
+
+      function logout() 
+        {
+          var xhttp = new XMLHttpRequest(); 
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) 
+            { 
+              localStorage.removeItem("token");
+              localStorage.removeItem("user_id");
+              window.location.assign("todo-login.html");
+            }
+          };
+          xhttp.open("POST",  "/todoapi/users/logout ", true);
+          xhttp.withCredentials = true; 
+          xhttp.setRequestHeader("Authorization", authheader); 
+          xhttp.send();
+        }
+
+      function getUserData() {
+        fetch('/todoapi/users/', {
+          credentials: "include",
+          headers: {
+            "Authorization": authheader,
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            var fName = data.user.firstName;
+            var lName = data.user.lastName;
+
+            var output = '<p>Hi, ' + fName + " " + lName + '   <button onclick="logout()">logout</button></p>';
+            
+
+            document.querySelector('#welcome').innerHTML = output;
+          })
+          .catch(error => console.error(error));
+      }
+
+      getData();
+      getUserData();
+      
+    </script>
+ </body>
+</html>

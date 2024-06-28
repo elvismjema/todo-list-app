@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Todo Add</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <script>
+        var token = localStorage.getItem("token");
+        var authheader;
+         if (token != "" && token != null) {
+         	authheader = 'Bearer ' + token ;
+                 } else {
+	            authheader = "";
+            }
+
+
+      function submitForm(e) {
+        e.preventDefault();
+        console.log("submitform function called");
+        var Name=document.getElementById("Name").value;
+        console.log("Name: " + Name);
+        var data =JSON.stringify({name: Name});
+        console.log("data: "+ data);
+       
+        fetch("/todoapi/lists/", {
+          credentials: "include",
+          headers: {
+            "Authorization": authheader,
+            "Content-Type": "application/json",
+          },
+    method: "POST",
+    body: data,
+  })
+    .then(function (response) {
+      if (response.ok) {
+        console.log("Post Successful");
+        document.getElementById("page-message").innerHTML = "Record Added";
+        window.location.assign("todo-list.html");
+      } else {
+        throw new Error("Error: " + response.statusText);
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+      document.getElementById("page-message").innerHTML = error.message;
+    });
+  };
+ 
+</script>
+
+<h2>Todo Add</h2>
+<p id="debug"></p>
+<div class="block-center">
+  <p><span id="page-message">Enter fields and click Save</span></p>
+  <p><span class="error-head">* required field.</span></p>
+  <form id="todoForm" onsubmit="submitForm(event)">
+    Name: <input type="text" id="Name" /> 
+      <br /> <br />
+      <Button type="submit">Save</Button>  <button type="submit">Cancel</button>
+  </form>
+  <form action="todo-list.html" method="get"> 
+  </form>
+</div>
+</body>
+</html>
