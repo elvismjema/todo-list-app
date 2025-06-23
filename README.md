@@ -8,6 +8,14 @@ Link to it:
 http://ec2-3-144-190-183.us-east-2.compute.amazonaws.com/todo-frontend_secure/todo-login.html
 
 
+![Image](https://github.com/user-attachments/assets/e5dbe2c9-eb9d-49d0-b3bd-02745f1df86d)
+
+![Image](https://github.com/user-attachments/assets/3e5f598f-3c9e-402d-99c3-07e5d56265d2)
+
+![Image](https://github.com/user-attachments/assets/e3e50608-60f4-4a2d-a9a9-399d9fe8c578)
+
+![Image](https://github.com/user-attachments/assets/24c89514-4eb0-4b41-b6f2-a17535256ade)
+
 
 Screen Functionality
 
